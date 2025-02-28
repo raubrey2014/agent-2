@@ -65,7 +65,7 @@ function generateSuggestion(weatherCondition: string, temperature: number): stri
   }
 }
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     // Fetch current weather data for Boston using Open-Meteo API
     const weatherResponse = await fetch(

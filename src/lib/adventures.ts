@@ -1,5 +1,5 @@
 import { prisma } from './db';
-import { format, subDays, isToday, isYesterday } from 'date-fns';
+import { format, isToday, isYesterday } from 'date-fns';
 
 export interface Adventure {
   id: number;
@@ -27,7 +27,7 @@ export async function getAdventures(limit = 10): Promise<FormattedAdventure[]> {
       take: limit,
     });
 
-    return adventures.map(adventure => {
+    return adventures.map((adventure: Adventure) => {
       const adventureDate = new Date(adventure.date);
       const isAdventureToday = isToday(adventureDate);
       const isAdventureYesterday = isYesterday(adventureDate);

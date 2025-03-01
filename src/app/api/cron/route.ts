@@ -4,7 +4,8 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'edge';
 
 export async function GET() {
-  const url = `${process.env.VERCEL_URL || 'http://localhost:3000'}/api/generate-adventure`;
+  const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : `http://localhost:3000`;
+  const url = `${baseUrl}/api/generate-adventure`;
   console.log('Executing cron job, hitting url:', url);
   try {
     // Call the generate-adventure API endpoint

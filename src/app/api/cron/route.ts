@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { getWeatherAdventure } from '@/lib/mastra/workflows/weather';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'edge';
@@ -67,32 +68,16 @@ function generateSuggestion(weatherCondition: string, temperature: number): stri
 
 export async function GET() {
   try {
-    // Fetch current weather data for Boston using Open-Meteo API
-    const weatherResponse = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${BOSTON_LAT}&longitude=${BOSTON_LON}&current=temperature_2m,weather_code,is_day&temperature_unit=fahrenheit`
-    );
-    
-    if (!weatherResponse.ok) {
-      throw new Error(`Weather API responded with status: ${weatherResponse.status}`);
-    }
-    
-    const weatherData: WeatherData = await weatherResponse.json();
-    
-    // Extract weather information
-    const temperature = Math.round(weatherData.current.temperature_2m);
-    const weatherCode = weatherData.current.weather_code;
-    const condition = getWeatherCondition(weatherCode);
-    
-    // Generate adventure suggestion based on weather
-    const suggestion = generateSuggestion(condition, temperature);
+    // Get structured weather data and adventure suggestion
+    const weatherData = await getWeatherAdventure();
     
     // Create a new adventure in the database
     const adventure = await prisma.adventure.create({
       data: {
-        weather: `${condition}, ${temperature}°F`,
-        temperature,
-        condition,
-        suggestion,
+        weather: `${weatherData.condition}, ${weatherData.temperature}°F`,
+        temperature: weatherData.temperature,
+        condition: weatherData.condition,
+        suggestion: weatherData.suggestion,
       },
     });
     

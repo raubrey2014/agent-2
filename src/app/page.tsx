@@ -5,6 +5,8 @@ import { getAdventures } from "../lib/adventures";
 export default async function Home() {
   // Fetch adventures from the database
   const adventures = await getAdventures(10);
+
+  console.log("Fetched adventures:", adventures);
   
   // Fallback data in case the database is empty
   const fallbackAdventures = [

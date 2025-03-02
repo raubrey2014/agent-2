@@ -18,7 +18,7 @@ export interface FormattedAdventure {
   isYesterday: boolean;
 }
 
-export async function getAdventures(limit = 10): Promise<FormattedAdventure[]> {
+export async function getAdventures(limit = 5): Promise<FormattedAdventure[]> {
   try {
     const adventures = await prisma.adventure.findMany({
       orderBy: {

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import AdventureCard from "@/components/AdventureCard";
-import { getAdventures } from "@/lib/adventures";
+import { getAdventures } from "../lib/adventures";
 
 export default async function Home() {
   // Fetch adventures from the database

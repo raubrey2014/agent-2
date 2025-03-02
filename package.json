@@ -11,10 +11,13 @@
   "dependencies": {
     "@ai-sdk/openai": "^1.1.15",
     "@mastra/core": "^0.4.3-alpha.4",
+    "@mastra/loggers": "^0.1.7",
     "@prisma/client": "^6.4.1",
     "@vercel/postgres": "^0.10.0",
     "ai": "^4.1.47",
     "date-fns": "^4.1.0",
+    "inngest": "^3.31.13",
+    "module-alias": "^2.2.3",
     "next": "15.2.0",
     "prisma": "^6.4.1",
     "react": "^19.0.0",

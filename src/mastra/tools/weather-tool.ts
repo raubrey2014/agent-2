@@ -1,5 +1,6 @@
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
+import { mastraLogger } from "..";
  
 interface WeatherResponse {
   current: {
@@ -29,7 +30,8 @@ export const weatherTool = createTool({
     location: z.string(),
   }),
   execute: async ({ context }) => {
-    return await getWeather(context.location);
+    mastraLogger.info('[Weather tool] Getting weather for location:', context.triggerData.location);
+    return await getWeather(context.triggerData.location);
   },
 });
  
@@ -49,6 +51,8 @@ const getWeather = async (location: string) => {
   const response = await fetch(weatherUrl);
   const data: WeatherResponse = await response.json();
  
+  console.log('[Weather tool] Gathered weather for location:', location, 'Weather data:', data);
+
   return {
     temperature: data.current.temperature_2m,
     feelsLike: data.current.apparent_temperature,

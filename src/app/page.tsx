@@ -2,9 +2,12 @@ import Image from "next/image";
 import AdventureCard from "@/components/AdventureCard";
 import { getAdventures } from "../lib/adventures";
 
+// Add this to force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   // Fetch adventures from the database
-  const adventures = await getAdventures(10);
+  const adventures = await getAdventures(5);
 
   console.log("Fetched adventures:", adventures);
   

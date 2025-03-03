@@ -13,6 +13,7 @@ const adventureAgentInvokeStep = new Step({
       condition: z.string(),
       temperature: z.number(),
       suggestion: z.string(),
+      location: z.string(),
     }),
   }),
   execute: async ({ context, mastra }) => {
@@ -43,8 +44,10 @@ Hourly forecast: ${weather.hourly.map(h => `${h.time}: ${h.temperature}°F`).joi
  
 Your primary function is to provide a fun adventure suggestion based on the weather for specific locations. When responding:
 - Keep responses concise but informative
-- Always include a fun adventure suggestion
+- Always include a fun adventure suggestion specific to ${weather.location}
 - Always ensure the adventure suggestion is different than previous suggestions
+- Include specific landmarks, parks, or attractions in ${weather.location} when possible
+- Make the adventure appropriate for the current weather conditions
 
 Generate a fun adventure for ${weather.location}.`,
       },
@@ -55,6 +58,7 @@ Generate a fun adventure for ${weather.location}.`,
         condition: weather.conditions,
         temperature: weather.temperature,
         suggestion: result?.text || '',
+        location: weather.location,
       }
     };
   },
@@ -75,7 +79,8 @@ const saveAdventureStep = new Step({
       result: { 
         condition: string, 
         temperature: number, 
-        suggestion: string 
+        suggestion: string,
+        location: string
       } 
     };
     
@@ -97,6 +102,7 @@ const saveAdventureStep = new Step({
       temperature: adventureData.result.temperature,
       condition: adventureData.result.condition,
       suggestion: adventureData.result.suggestion,
+      location: adventureData.result.location,
     });
 
     const adventure = await prisma.adventure.create({
@@ -105,6 +111,7 @@ const saveAdventureStep = new Step({
         temperature: adventureData.result.temperature,
         condition: adventureData.result.condition,
         suggestion: adventureData.result.suggestion,
+        location: adventureData.result.location || weather.location,
       },
     });
 

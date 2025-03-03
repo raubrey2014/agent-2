@@ -8,12 +8,14 @@ export interface Adventure {
   temperature: number;
   condition: string;
   suggestion: string;
+  location?: string;
 }
 
 export interface FormattedAdventure {
   date: string;
   weather: string;
   suggestion: string;
+  location: string;
   isToday: boolean;
   isYesterday: boolean;
 }
@@ -36,6 +38,7 @@ export async function getAdventures(limit = 5): Promise<FormattedAdventure[]> {
         date: format(adventureDate, 'MMMM d, yyyy'),
         weather: adventure.weather,
         suggestion: adventure.suggestion,
+        location: adventure.location || "Boston",
         isToday: isAdventureToday,
         isYesterday: isAdventureYesterday
       };

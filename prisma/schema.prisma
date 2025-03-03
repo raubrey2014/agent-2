@@ -18,6 +18,7 @@ model Adventure {
   temperature Float
   condition   String
   suggestion  String   @db.Text
+  location    String   @default("Boston")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 } 

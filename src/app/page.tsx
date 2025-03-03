@@ -53,6 +53,7 @@ export default async function Home() {
               date={adventure.date}
               weather={adventure.weather}
               suggestion={adventure.suggestion}
+              location={adventure.location}
               isToday={adventure.isToday}
               isYesterday={adventure.isYesterday}
             />

@@ -34,7 +34,7 @@ export async function getAdventures(limit = 5): Promise<FormattedAdventure[]> {
       
       return {
         date: format(adventureDate, 'MMMM d, yyyy'),
-        weather: `${adventure.condition}, ${adventure.temperature}°F`,
+        weather: adventure.weather,
         suggestion: adventure.suggestion,
         isToday: isAdventureToday,
         isYesterday: isAdventureYesterday

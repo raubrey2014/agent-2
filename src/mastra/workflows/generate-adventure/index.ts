@@ -24,12 +24,14 @@ const adventureAgentInvokeStep = new Step({
       throw new Error('Weather data not available');
     }
 
-    const weather = weatherResult as { location: string, conditions: string, temperature: number };
+    const weather = weatherResult as { location: string, conditions: string, temperature: number, high: number, low: number, hourly: { time: string, temperature: number }[] };
 
     const result = await mastra?.agents?.weatherAgent.generate([
       {
         role: 'system',
-        content: `The weather in ${weather.location} is ${weather.conditions} with a temperature of ${weather.temperature}°F.`,
+        content: `The weather in ${weather.location} is ${weather.conditions} with a current temperature of ${weather.temperature}°F. 
+Today's high will be ${weather.high}°F and the low will be ${weather.low}°F. 
+Hourly forecast: ${weather.hourly.map(h => `${h.time}: ${h.temperature}°F`).join(', ')}.`,
       },
       {
         role: 'system',
@@ -63,24 +65,53 @@ const saveAdventureStep = new Step({
   inputSchema: z.object({}),
   outputSchema: z.object({}),
   execute: async ({ context }) => {
-    mastraLogger.info('[Save adventure step] Starting save adventure step with context:', context);
     console.log('[Save adventure step] Starting save adventure step with context:', context);
     const adventureDataStepResult = context.getStepResult('adventure-agent-invoke');
     if (!adventureDataStepResult) {
       throw new Error('Adventure data not available');
     }
 
-    const adventureData = adventureDataStepResult as { result: { condition: string, temperature: number, suggestion: string } };
+    const adventureData = adventureDataStepResult as { 
+      result: { 
+        condition: string, 
+        temperature: number, 
+        suggestion: string 
+      } 
+    };
+    
+    const weatherResult = context.getStepResult('get-weather');
+    if (!weatherResult) {
+      throw new Error('Weather data not available');
+    }
+    
+    const weather = weatherResult as { 
+      location: string, 
+      conditions: string, 
+      temperature: number, 
+      high: number, 
+      low: number 
+    };
 
+    console.log('[Save adventure step] Saving adventure with data:', {
+      weather: `${adventureData.result.condition} (High: ${weather.high}°F, Low: ${weather.low}°F)`,
+      temperature: adventureData.result.temperature,
+      condition: adventureData.result.condition,
+      suggestion: adventureData.result.suggestion,
+    });
 
     const adventure = await prisma.adventure.create({
       data: {
-        weather: `${adventureData.result.condition}, ${adventureData.result.temperature}°F`,
+        weather: `${adventureData.result.condition} (High: ${weather.high}°F, Low: ${weather.low}°F)`,
         temperature: adventureData.result.temperature,
         condition: adventureData.result.condition,
         suggestion: adventureData.result.suggestion,
       },
     });
+
+    const adventureAfterSave = await prisma.adventure.findUnique({
+      where: { id: adventure.id },
+    });
+    console.log('[Save adventure step] Adventure saved:', adventureAfterSave);
 
     return { adventure };
   },

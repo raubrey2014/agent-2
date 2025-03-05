@@ -12,6 +12,7 @@
     "@ai-sdk/openai": "^1.1.15",
     "@mastra/core": "^0.4.3-alpha.4",
     "@mastra/loggers": "^0.1.7",
+    "@mendable/firecrawl-js": "^1.19.0",
     "@prisma/client": "^6.4.1",
     "@vercel/postgres": "^0.10.0",
     "ai": "^4.1.47",

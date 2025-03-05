@@ -10,7 +10,7 @@ interface PreviousAdventuresResponse {
   }[];
 }
 
-const outputSchema = z.object({
+export const previousAdventuresOutputSchema = z.object({
   adventures: z.array(z.object({
     adventure: z.string(),
     date: z.string(),
@@ -21,7 +21,7 @@ export const previousAdventuresTool = createTool({
   id: "get-previous-adventures",
   description: "Get previous adventures",
   inputSchema: z.object({}),
-  outputSchema: outputSchema,
+  outputSchema: previousAdventuresOutputSchema,
   execute: async (): Promise<PreviousAdventuresResponse> => {
     console.log("[get-previous-adventures] Getting previous adventures");
 

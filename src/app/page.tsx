@@ -8,29 +8,9 @@ export const dynamic = 'force-dynamic';
 export default async function Home() {
   // Fetch adventures from the database
   const adventures = await getAdventures(5);
-
-  console.log("Fetched adventures:", adventures);
-  
-  // Fallback data in case the database is empty
-  const fallbackAdventures = [
-    {
-      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-      weather: 'Sunny, 72°F',
-      suggestion: 'Take a walk along the Charles River Esplanade and enjoy the sunshine. Perfect weather for a picnic or outdoor reading session.',
-      isToday: true,
-      isYesterday: false,
-    },
-    {
-      date: new Date(Date.now() - 86400000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-      weather: 'Cloudy, 65°F',
-      suggestion: 'Visit the Boston Public Library and explore their current exhibitions. The weather is perfect for indoor activities.',
-      isToday: false,
-      isYesterday: true,
-    },
-  ];
   
   // Use database adventures if available, otherwise use fallback
-  const displayAdventures = adventures.length > 0 ? adventures : fallbackAdventures;
+  const displayAdventures = adventures.length > 0 ? adventures : [];
 
   return (
     <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-geist-sans)]">

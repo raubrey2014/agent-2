@@ -33,7 +33,7 @@ export const weatherTool = createTool({
   }),
   outputSchema,
   execute: async ({ context }): Promise<WeatherResponse> => {
-    const location = context.triggerData.location;
+    const location = context.location || context.triggerData.location;
     
     try {
       // Use Open-Meteo Geocoding API to get coordinates for the location
